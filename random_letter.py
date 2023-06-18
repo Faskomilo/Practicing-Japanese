@@ -5,70 +5,8 @@ from time import sleep
 import wanakana
 
 def main():
-    hiragana = (
-        {'basic': ['a','i','u','e','o']},
-        {'k': ['ka','ki','ku','ke','ko']},
-        {'s': ['sa','shi','su','se','so']},
-        {'t': ['ta','chi','tsu','te','to']},
-        {'n': ['na','ni','nu','ne','no']},
-        {'h': ['ha','hi','fu','he','ho']},
-        {'m': ['ma','mi','mu','me','mo']},
-        {'y': ['ya','yu','yo']},
-        {'r': ['ra','ri','ru','re','ro']},
-        {'w': ['wa','wo']},
-        {'n': ['n']},
-        {'g': ['ga','gi','gu','ge','go']},
-        {'z': ['za','ji','zu','ze','zo']},
-        {'d': ['da','ji','zu','de','do']},
-        {'b': ['ba','bi','bu','be','bo']},
-        {'p': ['pa','pi','pu','pe','po']},
-        {'ky': ['kya','kyu','kyo']},
-        {'sh': ['sha','shu','sho']},
-        {'ch': ['cha','chu','cho']},
-        {'ny': ['nya','nyu','nyo']},
-        {'hy': ['hya','hyu','hyo']},
-        {'my': ['mya','myu','myo']},
-        {'ry': ['rya','ryu','ryo']},
-        {'gy': ['gya','gyu','gyo']},
-        {'j': ['ja','ju','jo']},
-        {'by': ['bya','byu','byo']},
-        {'py': ['pya','pyu','pyo']}
-    )
-
-    katakana = ()
-
-    kanji = ()
-
-    with open("config.yaml", "r") as file:
-        config = yaml.safe_load(file)
-
-    hiragana_latest = config["letters"]["hiragana"]
-    katakana_latest = config["letters"]["katakana"]
-    kanji_latest = config["letters"]["kanji"]
+    config = Utils.read_config()
     seconds_between_letters = config["system"]["secs_between_letters"]
-
-    catalogue = {}
-
-    if hiragana_latest != "":
-        catalogue["hiragana"] = []
-        for letter in hiragana:
-            catalogue["hiragana"].extend(list(letter.values())[0])
-            if hiragana_latest == list(letter.keys())[0]:
-                break
-
-    if katakana_latest != "":
-        catalogue["katakana"] = []
-        for letter in katakana:
-            catalogue["katakana"].extend(list(letter.values())[0])
-            if katakana_latest == list(letter.keys())[0]:
-                break
-
-    if kanji_latest != "":
-        catalogue["kanji"] = []
-        for letter in kanji:
-            catalogue["kanji"].extend(list(letter.values())[0])
-            if kanji_latest == list(letter.keys())[0]:
-                break
 
     game_type = input(
         """Which game would you like to play?
@@ -108,15 +46,15 @@ class games():
     @staticmethod
     def write_it_down(catalogue, seconds_between_letters):
         while True:
-            chosen_writting_type = choice(list(catalogue.keys()))
-            chosen_letter = choice(catalogue[chosen_writting_type])
-            print(f"{chosen_writting_type}: {chosen_letter}")
+            chosen_writting_system = choice(list(catalogue.keys()))
+            chosen_syllabe_kanji = choice(catalogue[chosen_writting_system])
+            print(f"{chosen_writting_system}: {chosen_syllabe_kanji}")
             sleep(seconds_between_letters)
-            if chosen_writting_type == "Hiragana":
-                print(wanakana.to_hiragana(chosen_letter))
-            elif chosen_writting_type == "Katakana":
-                print(wanakana.to_katakana(chosen_letter))
-            elif chosen_writting_type == "Kanji":
+            if chosen_writting_system == "Hiragana":
+                print(wanakana.to_hiragana(chosen_syllabe_kanji))
+            elif chosen_writting_system == "Katakana":
+                print(wanakana.to_katakana(chosen_syllabe_kanji))
+            elif chosen_writting_system == "Kanji":
                 print("TBI")
             print("----------------------------------")
 
@@ -146,6 +84,125 @@ class games():
                 print(f"No. The answer is: {romanji_word}")
             sleep(2)
             print("----------------------------------")
+
+class Catalogue:
+    hiragana = (
+        {'basic': ['a','i','u','e','o']},
+        {'k': ['ka','ki','ku','ke','ko']},
+        {'s': ['sa','shi','su','se','so']},
+        {'t': ['ta','chi','tsu','te','to']},
+        {'n': ['na','ni','nu','ne','no']},
+        {'h': ['ha','hi','fu','he','ho']},
+        {'m': ['ma','mi','mu','me','mo']},
+        {'y': ['ya','yu','yo']},
+        {'r': ['ra','ri','ru','re','ro']},
+        {'w': ['wa','wo']},
+        {'n': ['n']},
+        {'g': ['ga','gi','gu','ge','go']},
+        {'z': ['za','ji','zu','ze','zo']},
+        {'d': ['da','ji','zu','de','do']},
+        {'b': ['ba','bi','bu','be','bo']},
+        {'p': ['pa','pi','pu','pe','po']},
+        {'ky': ['kya','kyu','kyo']},
+        {'sh': ['sha','shu','sho']},
+        {'ch': ['cha','chu','cho']},
+        {'ny': ['nya','nyu','nyo']},
+        {'hy': ['hya','hyu','hyo']},
+        {'my': ['mya','myu','myo']},
+        {'ry': ['rya','ryu','ryo']},
+        {'gy': ['gya','gyu','gyo']},
+        {'j': ['ja','ju','jo']},
+        {'by': ['bya','byu','byo']},
+        {'py': ['pya','pyu','pyo']}
+    )
+
+    katakana = (
+        {'basic': ['a','i','u','e','o']},
+        {'k': ['ka','ki','ku','ke','ko']},
+        {'s': ['sa','shi','su','se','so']},
+        {'t': ['ta','chi','tsu','te','to']},
+        {'n': ['na','ni','nu','ne','no']},
+        {'h': ['ha','hi','fu','he','ho']},
+        {'m': ['ma','mi','mu','me','mo']},
+        {'y': ['ya','yu','yo']},
+        {'r': ['ra','ri','ru','re','ro']},
+        {'w': ['wa','wo']},
+        {'n': ['n']},
+        {'g': ['ga','gi','gu','ge','go']},
+        {'z': ['za','ji','zu','ze','zo']},
+        {'d': ['da','ji','zu','de','do']},
+        {'b': ['ba','bi','bu','be','bo']},
+        {'p': ['pa','pi','pu','pe','po']},
+        {'ky': ['kya','kyu','kyo']},
+        {'sh': ['sha','shu','sho']},
+        {'ch': ['cha','chu','cho']},
+        {'ny': ['nya','nyu','nyo']},
+        {'hy': ['hya','hyu','hyo']},
+        {'my': ['mya','myu','myo']},
+        {'ry': ['rya','ryu','ryo']},
+        {'gy': ['gya','gyu','gyo']},
+        {'j': ['ja','ju','jo']},
+        {'by': ['bya','byu','byo']},
+        {'py': ['pya','pyu','pyo']}
+    )
+
+    kanji = ()
+
+    def __init__(self, config) -> None:
+        self.hiragana_latest = self.config["letters"]["hiragana"]
+        self.katakana_latest = self.config["letters"]["katakana"]
+        self.kanji_latest = self.config["letters"]["kanji"]
+
+    def create_catalogue(self):
+        pass
+
+    def create_whole_catalogue(self):
+        self._catalogue_ = {}
+
+        self._catalogue_["hiragana"] = []
+        for letter in self.hiragana:
+            self._catalogue_["hiragana"].extend(list(letter.values())[0])
+        self._catalogue_["hiragana"] = []
+        for letter in self.hiragana:
+            self._catalogue_["hiragana"].extend(list(letter.values())[0])
+        self._catalogue_["hiragana"] = []
+        for letter in self.hiragana:
+            self._catalogue_["hiragana"].extend(list(letter.values())[0])
+
+    def reduce_catalogue_from_config(self):
+        self._catalogue_ = {}
+        
+        if self.hiragana_latest != "":
+            self._catalogue_["hiragana"] = []
+            for letter in self.hiragana:
+                self._catalogue_["hiragana"].extend(list(letter.values())[0])
+                if self.hiragana_latest == list(letter.keys())[0]:
+                    break
+
+        if self.katakana_latest != "":
+            self._catalogue_["katakana"] = []
+            for letter in self.katakana:
+                self._catalogue_["katakana"].extend(list(letter.values())[0])
+                if self.katakana_latest == list(letter.keys())[0]:
+                    break
+
+        if self.kanji_latest != "":
+            self._catalogue_["kanji"] = self.get_letter_elements_as_list(self.kanji, break_list=True, )
+    
+    def get_letter_elements_as_list(self, letter_catalogue, break_list= False, break_element= ""):
+        letters = []
+        for letter in letter_catalogue:
+            letters.extend(list(letter.values())[0])
+            if break_list and break_element == list(letter.keys())[0]:
+                break
+        return letters
+
+class Utils():
+    @staticmethod
+    def read_config():
+        with open("config.yaml", "r") as file:
+            config = yaml.safe_load(file)
+        return config
 
 if __name__ == "__main__":
     main()
