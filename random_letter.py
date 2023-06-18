@@ -6,10 +6,9 @@ import wanakana
 
 def main():
     config = Utils.read_config()
-    seconds_between_letters = config["system"]["secs_between_letters"]
+    catalogue = Catalogue(config).get_catalogue()
 
-    game_type = input(
-        """Which game would you like to play?
+    print("""Which game would you like to play?
 
         Options:
             1. Write it down: 
@@ -21,9 +20,10 @@ def main():
             3. Read combos without system hint:
                 A combination of syllabs and logographs (kanjis) will appear and
                 you have to read it and write it in romanji.
+        
+        """)
+    game_type = input("Type the number of the game you would like to play: ")
 
-        Type the number of the game you would like to play: """
-        )
     if game_type is None:
         print("You have to write a number")
         exit()
@@ -36,13 +36,14 @@ def main():
         exit()
 
     if game_type == 1:
-        games.write_it_down(catalogue, seconds_between_letters)
+        seconds_between_letters = config["system"]["secs_between_letters"]
+        Games.write_it_down(catalogue, seconds_between_letters)
     elif game_type == 2:
-        games.read_me(catalogue)
+        Games.reading_combos(catalogue)
     elif game_type == 3:
-        games.read_me(catalogue, type_hint=False)
+        Games.reading_combos(catalogue, type_hint=False)
 
-class games():
+class Games():
     @staticmethod
     def write_it_down(catalogue, seconds_between_letters):
         while True:
@@ -59,7 +60,7 @@ class games():
             print("----------------------------------")
 
     @staticmethod
-    def read_me(catalogue, type_hint= True):
+    def reading_combos(catalogue, type_hint= True):
         while True:
             chosen_writting_type = choice(list(catalogue.keys()))
             romanji_word = ""
@@ -69,7 +70,7 @@ class games():
                 type_hint = chosen_writting_type + ": "
             else:
                 type_hint = ""
-            print(f"Your word is:")
+            print(f"Your combo is:")
             if chosen_writting_type == "hiragana":
                 print(f"{type_hint}", wanakana.to_hiragana(romanji_word))
             elif chosen_writting_type == "katakana":
@@ -86,7 +87,7 @@ class games():
             print("----------------------------------")
 
 class Catalogue:
-    hiragana = (
+    _hiragana_ = (
         {'basic': ['a','i','u','e','o']},
         {'k': ['ka','ki','ku','ke','ko']},
         {'s': ['sa','shi','su','se','so']},
@@ -116,7 +117,7 @@ class Catalogue:
         {'py': ['pya','pyu','pyo']}
     )
 
-    katakana = (
+    _katakana_ = (
         {'basic': ['a','i','u','e','o']},
         {'k': ['ka','ki','ku','ke','ko']},
         {'s': ['sa','shi','su','se','so']},
@@ -146,50 +147,67 @@ class Catalogue:
         {'py': ['pya','pyu','pyo']}
     )
 
-    kanji = ()
+    _kanji_ = ()
 
     def __init__(self, config) -> None:
-        self.hiragana_latest = self.config["letters"]["hiragana"]
-        self.katakana_latest = self.config["letters"]["katakana"]
-        self.kanji_latest = self.config["letters"]["kanji"]
+        self._hiragana_latest_ = config["letters"]["hiragana"]
+        self._katakana_latest_ = config["letters"]["katakana"]
+        self._kanji_latest_ = config["letters"]["kanji"]
+        self._create_catalogue_()
 
-    def create_catalogue(self):
-        pass
+    def get_catalogue(self):
+        return self._catalogue_()
 
-    def create_whole_catalogue(self):
+    def _create_catalogue_(self):
+        if(self._hiragana_latest_ == 'py'
+           and self._katakana_latest_ == 'py'
+           and self._kanji_latest_ == list(self._kanji_.keys())[0]):
+            self._create_whole_catalogue_()
+        else:
+            self._reduce_catalogue_from_config_()
+
+    def _create_whole_catalogue_(self):
         self._catalogue_ = {}
 
-        self._catalogue_["hiragana"] = []
-        for letter in self.hiragana:
-            self._catalogue_["hiragana"].extend(list(letter.values())[0])
-        self._catalogue_["hiragana"] = []
-        for letter in self.hiragana:
-            self._catalogue_["hiragana"].extend(list(letter.values())[0])
-        self._catalogue_["hiragana"] = []
-        for letter in self.hiragana:
-            self._catalogue_["hiragana"].extend(list(letter.values())[0])
+        self._catalogue_["hiragana"] = self._get_letter_elements_as_list_(
+            self._hiragana_
+            )
+        self._catalogue_["katakana"] = self._get_letter_elements_as_list_(
+            self._katakana_
+            )
+        self._catalogue_["kanji"] = self._get_letter_elements_as_list_(
+            self._kanji_
+            )
 
-    def reduce_catalogue_from_config(self):
+    def _reduce_catalogue_from_config_(self):
         self._catalogue_ = {}
         
-        if self.hiragana_latest != "":
-            self._catalogue_["hiragana"] = []
-            for letter in self.hiragana:
-                self._catalogue_["hiragana"].extend(list(letter.values())[0])
-                if self.hiragana_latest == list(letter.keys())[0]:
-                    break
+        if self._hiragana_latest_ != "":
+            self._catalogue_["hiragana"] = self._get_letter_elements_as_list_(
+                self._hiragana_,
+                break_list=True,
+                break_element=self._hiragana_latest_
+            )
 
-        if self.katakana_latest != "":
-            self._catalogue_["katakana"] = []
-            for letter in self.katakana:
-                self._catalogue_["katakana"].extend(list(letter.values())[0])
-                if self.katakana_latest == list(letter.keys())[0]:
-                    break
+        if self._katakana_latest_ != "":
+            self._catalogue_["katakana"] = self._get_letter_elements_as_list_(
+                self._katakana_,
+                break_list=True,
+                break_element=self._katakana_latest_
+            )
 
-        if self.kanji_latest != "":
-            self._catalogue_["kanji"] = self.get_letter_elements_as_list(self.kanji, break_list=True, )
+        if self._kanji_latest_ != "":
+            self._catalogue_["kanji"] = self._get_letter_elements_as_list_(
+                self._kanji_,
+                break_list=True,
+                break_element=self._kanji_latest_
+            )
     
-    def get_letter_elements_as_list(self, letter_catalogue, break_list= False, break_element= ""):
+    def _get_letter_elements_as_list_(self,
+                                    letter_catalogue,
+                                    break_list= False,
+                                    break_element= ""
+                                    ) -> list:
         letters = []
         for letter in letter_catalogue:
             letters.extend(list(letter.values())[0])
