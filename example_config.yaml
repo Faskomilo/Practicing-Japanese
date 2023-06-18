@@ -1,0 +1,6 @@
+system:
+  secs_between_letters: 10
+letters:
+  hiragana: base
+  katakana: base
+  kanji: ""
