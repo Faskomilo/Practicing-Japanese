@@ -1,2 +1,2 @@
-# japanese_practice_game
+# Practicing Japanese
 Games for practicing reading japanese writing systems
