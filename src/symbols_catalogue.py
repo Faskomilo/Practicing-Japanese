@@ -1,4 +1,4 @@
-from utils.romaji_catalogue import hiragana, katakana, kanji
+from src.utils.romaji_catalogue import hiragana, katakana, kanji
 
 class Symbols_Catalogue:
 

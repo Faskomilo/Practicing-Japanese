@@ -3,7 +3,7 @@ from random import choice, randrange
 
 import wanakana
 
-from utils.romaji_catalogue import bad_words
+from src.utils.romaji_catalogue import bad_words
 
 class Games():
     def __init__(self, symbols_catalogue, secs_between_letters) -> None:

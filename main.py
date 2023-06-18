@@ -1,6 +1,6 @@
-from games import Games
-from symbols_catalogue import Symbols_Catalogue
-from utils.utils import Utils
+from src.games import Games
+from src.symbols_catalogue import Symbols_Catalogue
+from src.utils.utils import Utils
 
 def main():
     config = Utils.read_config()
