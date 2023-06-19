@@ -1,11 +1,10 @@
 from src.utils.romaji_catalogue import hiragana, katakana, kanji
 
 class Symbols_Catalogue:
-
     def __init__(self, config) -> None:
-        self._hiragana_latest_ = config["letters"]["hiragana"]
-        self._katakana_latest_ = config["letters"]["katakana"]
-        self._kanji_latest_ = config["letters"]["kanji"]
+        self._hiragana_latest_ = config["latest_element"]["hiragana"]
+        self._katakana_latest_ = config["latest_element"]["katakana"]
+        self._kanji_latest_ = config["latest_element"]["kanji"]
         self._create_catalogue_()
 
     def get_catalogue(self):
@@ -49,7 +48,7 @@ class Symbols_Catalogue:
                 break_element=self._katakana_latest_
             )
 
-        if self._kanji_latest_ != "":
+        if self._kanji_latest_ != 0:
             self._catalogue_["kanji"] = self._get_letter_elements_as_list_(
                 kanji,
                 break_list=True,

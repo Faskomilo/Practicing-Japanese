@@ -1,5 +1,5 @@
 hiragana = (
-    {'basic': ['a','i','u','e','o']},
+    {'base': ['a','i','u','e','o']},
     {'k': ['ka','ki','ku','ke','ko']},
     {'s': ['sa','shi','su','se','so']},
     {'t': ['ta','chi','tsu','te','to']},
@@ -29,7 +29,7 @@ hiragana = (
 )
 
 katakana = (
-    {'basic': ['a','i','u','e','o']},
+    {'base': ['a','i','u','e','o']},
     {'k': ['ka','ki','ku','ke','ko']},
     {'s': ['sa','shi','su','se','so']},
     {'t': ['ta','chi','tsu','te','to']},

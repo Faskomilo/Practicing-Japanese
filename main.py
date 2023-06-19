@@ -33,8 +33,7 @@ def main():
     except ValueError or Exception:
         print(f"Incorrect value, given: {game_number} expected 1, 2, 3")
         exit()
-    secs_between_letters = config["system"]["secs_between_letters"]
-    Games(symbols_catalogue, secs_between_letters).choose_game(game_number)
+    Games(symbols_catalogue, config).choose_game(game_number)
 
 if __name__ == "__main__":
     main()

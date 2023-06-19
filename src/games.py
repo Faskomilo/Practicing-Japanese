@@ -6,9 +6,9 @@ import wanakana
 from src.utils.romaji_catalogue import bad_words
 
 class Games():
-    def __init__(self, symbols_catalogue, secs_between_letters) -> None:
-        self.symbols_catalogue = symbols_catalogue
-        self.secs_between_letters = secs_between_letters
+    def __init__(self, symbols_catalogue, config) -> None:
+        self._symbols_catalogue_ = symbols_catalogue
+        self._config_ = config
         self.game_catalogue = {
             1: self.reading_combos,
             2: lambda symbols_catalogue: self.reading_combos(
@@ -18,15 +18,16 @@ class Games():
         }
 
     def choose_game(self, game_number):
-        self.game_catalogue[game_number](self.symbols_catalogue)
+        self.game_catalogue[game_number](self._symbols_catalogue_)
     
     def write_it_down(self, catalogue):
+        game_config = self._config_["games"]
         while True:
             chosen_writting_system = choice(list(catalogue.keys()))
             chosen_syllabe_or_kanji = choice(
                 catalogue[chosen_writting_system])
             print(f"{chosen_writting_system}: {chosen_syllabe_or_kanji}")
-            sleep(self.secs_between_letters)
+            sleep(game_config["secs_between_letters"])
             if chosen_writting_system == "Hiragana":
                 print(wanakana.to_hiragana(chosen_syllabe_or_kanji))
             elif chosen_writting_system == "Katakana":
@@ -61,11 +62,11 @@ class Games():
             elif chosen_writting_system == "kanji":
                 print(f"{writting_system_hint}", "TBI")
 
-            romaji_input = input("romaji: \n")
+            romaji_input = input("romaji: \n\n")
             if romaji_word.lower() == romaji_input.lower():
-                print("CORRECT!!")
+                print("\nCORRECT!!")
             else:
-                print(f"No. The answer is: {romaji_word}")
+                print(f"\nNo. The answer is: {romaji_word}")
 
             sleep(2)
             print("----------------------------------")
