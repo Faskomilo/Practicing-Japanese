@@ -1,3 +1,9 @@
+"""
+A file that contains the complete catalogue of syllabogram writting systems
+(hiragana, katakana) and a way to ingest the data for kanjis and it's
+jukugos. As well as a bad word's list as to avoid them.
+"""
+
 hiragana = (
     {'base': ['a','i','u','e','o']},
     {'k': ['ka','ki','ku','ke','ko']},

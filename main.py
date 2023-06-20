@@ -1,10 +1,21 @@
+"""
+A file that contains the main function of the system, the main entry point.
+"""
 from src.games import Games
 from src.symbols_catalogue import Symbols_Catalogue
 from src.utils.utils import Utils
+from src.utils.input_manager import Input_Manager
 
-def main():
+def main() -> None:
+    """
+    Runs the whole system for choosing a game, creating a syllabogram
+    and logogram catalogue for the Hiragana, Katakana and Kanji systems
+    depending on the configurations given on the config.yaml file and
+    running a game.
+    """
     config = Utils.read_config()
     symbols_catalogue = Symbols_Catalogue(config).get_catalogue()
+    game_options = [1,2,3]
 
     print("""Which game would you like to play?
 
@@ -20,19 +31,9 @@ def main():
                 to writeon paper, and you have to write it before the next
                 one comes.
         """)
-    game_number = input(
-        "Type the number of the game you would like to play: ")
-
-    if game_number is None:
-        print("You have to write a number")
-        exit()
-    try:
-        game_number = int(game_number)
-        if game_number not in [1,2,3]:
-            raise ValueError
-    except ValueError or Exception:
-        print(f"Incorrect value, given: {game_number} expected 1, 2, 3")
-        exit()
+    
+    message = "Type the number of the game you would like to play: "
+    game_number = Input_Manager(config).ask_input(message, int, game_options)
     Games(symbols_catalogue, config).choose_game(game_number)
 
 if __name__ == "__main__":

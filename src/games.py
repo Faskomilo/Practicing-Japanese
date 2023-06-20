@@ -1,12 +1,32 @@
+"""
+A file that contains the class Games.
+"""
 from time import sleep
 from random import choice, randrange
 
 import wanakana
 
 from src.utils.romaji_catalogue import bad_words
+from src.utils.input_manager import Input_Manager
 
 class Games():
-    def __init__(self, symbols_catalogue, config) -> None:
+    """
+    A class that contains all the games, and the basic functionalities
+    such as a way to choose a game.
+    """
+
+    def __init__(self,
+                 symbols_catalogue: dict,
+                 config: dict
+                 ) -> None:
+        """
+        The function that will start an instance for the Game class.
+
+        Args:
+            symbols_catalogue (dict): A dictionary with all the usable
+                symbols, with the main keys being the writting systems.
+            config (dict): A dictionary of a config yaml file.
+        """
         self._symbols_catalogue_ = symbols_catalogue
         self._config_ = config
         self.game_catalogue = {
@@ -17,11 +37,27 @@ class Games():
             3: self.write_it_down
         }
 
-    def choose_game(self, game_number):
+    def choose_game(self, game_number: int) -> None:
+        """
+        A function to run a game, given the number it corresponds to,
+        and passes the internal symbol catalogue.
+
+        Args:
+            game_number (int): The chosen game number.
+        """
         self.game_catalogue[game_number](self._symbols_catalogue_)
     
-    def write_it_down(self, catalogue):
-        game_config = self._config_["games"]
+    def write_it_down(self, catalogue: dict) -> None:
+        """
+        A game that gives you non-stop a writting system and a symbol
+        to write on paper, every n seconds configured in the config file,
+        and then it shows the symbol in it's corresponding writting system.
+
+        Args:
+            catalogue (dic): A dictionary with all the usable
+                symbols, with the main keys being the writting systems.
+        """
+        game_config = self._config_["games"]["write_it_down"]
         while True:
             chosen_writting_system = choice(list(catalogue.keys()))
             chosen_syllabe_or_kanji = choice(
@@ -36,8 +72,22 @@ class Games():
                 print("TBI")
             print("----------------------------------")
 
-    def reading_combos(self, catalogue, writting_system_hint= True):
+    def reading_combos(self, catalogue: dict,
+                       writting_system_hint: bool = True
+                       ) -> None:
+        """
+        A game that non-stop gives you a combination of symbols and asks you
+        to write it in romaji/latin symbols.
+
+        Args:
+            catalogue (dic): A dictionary with all the usable
+                symbols, with the main keys being the writting systems.
+            writting_system_hint (bool, optional): Whether the game will tell
+                you which writting system does the symbols belong to. Defaults
+                to True.
+        """
         prev_romaji_word = ""
+        input_manager = Input_Manager(self._config_)
         while True:
             chosen_writting_system = choice(list(catalogue.keys()))
             romaji_word = ""
@@ -48,25 +98,24 @@ class Games():
             prev_romaji_word = romaji_word
 
             if writting_system_hint:
-                writting_system_hint = chosen_writting_system + ": "
+                writting_system_hint = chosen_writting_system + ":\n\t"
             else:
-                writting_system_hint = ""
+                writting_system_hint = "\t"
             
             print(f"Your combo is:")
             if chosen_writting_system == "hiragana":
-                print(f"{writting_system_hint}",
-                      wanakana.to_hiragana(romaji_word))
+                print(f"{writting_system_hint}{wanakana.to_hiragana(romaji_word)}")
             elif chosen_writting_system == "katakana":
                 print(f"{writting_system_hint}",
                       wanakana.to_katakana(romaji_word))
             elif chosen_writting_system == "kanji":
                 print(f"{writting_system_hint}", "TBI")
 
-            romaji_input = input("romaji: \n\n")
+            romaji_input = input_manager.ask_input("\nYour romaji answer:\n\t", str)
             if romaji_word.lower() == romaji_input.lower():
                 print("\nCORRECT!!")
             else:
-                print(f"\nNo. The answer is: {romaji_word}")
+                print(f"\nIncorrect, the answer is: {romaji_word}")
 
-            sleep(2)
+            sleep(1)
             print("----------------------------------")

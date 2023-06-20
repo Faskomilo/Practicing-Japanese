@@ -2,7 +2,7 @@ games:
   write_it_down:
     # seconds between logograms or syllabograms
     secs_between_letters: 10
-latest_element:
+top_symbol:
   # Must be one of the options, and the games will use it and the previous 
   # ones.
   # Options: 'base', 'k', 's', 't', 'n', 'h', 'm', 'y', 'r', 'w', 'n', 'g',
@@ -18,3 +18,6 @@ latest_element:
   # The school grade that is taught in according to the Joyo Kanji List,
   # ranges from 1 to 7, or 0 for none
   kanji: 7
+system:
+  # A number of tries for inputs, 0 for unlimited tries
+  input_tries: 3
