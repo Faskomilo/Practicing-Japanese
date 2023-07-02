@@ -34,7 +34,10 @@ class Games():
             2: lambda symbols_catalogue: self.reading_combos(
                 symbols_catalogue,
                 writting_system_hint=False),
-            3: self.write_it_down
+            3: self.write_it_down,
+            4: lambda symbols_catalogue: self.write_it_down(
+                symbols_catalogue,
+                multiple=True)
         }
 
     def choose_game(self, game_number: int) -> None:
@@ -47,7 +50,10 @@ class Games():
         """
         self.game_catalogue[game_number](self._symbols_catalogue_)
     
-    def write_it_down(self, catalogue: dict) -> None:
+    def write_it_down(self,
+                      catalogue: dict,
+                      multiple: bool = False
+                      ) -> None:
         """
         A game that gives you non-stop a writting system and a symbol
         to write on paper, every n seconds configured in the config file,
@@ -56,12 +62,21 @@ class Games():
         Args:
             catalogue (dic): A dictionary with all the usable
                 symbols, with the main keys being the writting systems.
+                multiple (bool): Whether the game wil show one or multiple
+                    symbols at a time.
         """
-        game_config = self._config_["games"]["write_it_down"]
+        games_config = self._config_["games"]
+        game_config = (games_config["write_it_down"]
+                       if not multiple
+                       else games_config["write_them_down"])
         while True:
             chosen_writting_system = choice(list(catalogue.keys()))
             chosen_syllabe_or_kanji = choice(
                 catalogue[chosen_writting_system])
+            if multiple:
+                for _ in range(randrange(2,6)):
+                    chosen_syllabe_or_kanji += choice(
+                        catalogue[chosen_writting_system])
             print(f"{chosen_writting_system}: {chosen_syllabe_or_kanji}")
             sleep(game_config["secs_between_letters"])
             if chosen_writting_system == "Hiragana":

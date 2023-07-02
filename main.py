@@ -15,7 +15,7 @@ def main() -> None:
     """
     config = Utils.read_config()
     symbols_catalogue = Symbols_Catalogue(config).get_catalogue()
-    game_options = [1,2,3]
+    game_options = [1,2,3,4]
 
     print("""Which game would you like to play?
 
@@ -28,8 +28,12 @@ def main() -> None:
                 and you have to read it and write it in romaji.
             3. Write it down: 
                 A game where the game will tell you which syllable or kanji
-                to writeon paper, and you have to write it before the next
-                one comes.
+                to write on paper, and you have to write it before the next
+                one pops up.
+            4. Write them down: 
+                A game where the game will tell you a combination of syllables
+                or kanjis to write on paper, and you have to write it before
+                the next combo pops up.
         """)
     
     message = "Type the number of the game you would like to play: "
