@@ -79,11 +79,11 @@ class Games():
                         catalogue[chosen_writting_system])
             print(f"{chosen_writting_system}: {chosen_syllabe_or_kanji}")
             sleep(game_config["secs_between_letters"])
-            if chosen_writting_system == "Hiragana":
+            if chosen_writting_system == "hiragana":
                 print(wanakana.to_hiragana(chosen_syllabe_or_kanji))
-            elif chosen_writting_system == "Katakana":
+            elif chosen_writting_system == "katakana":
                 print(wanakana.to_katakana(chosen_syllabe_or_kanji))
-            elif chosen_writting_system == "Kanji":
+            elif chosen_writting_system == "kanji":
                 print("TBI")
             print("----------------------------------")
 
