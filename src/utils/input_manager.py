@@ -51,13 +51,13 @@ class Input_Manager():
                 print(f"Error, insert a value\nTries left: {self._tries_}\n")
                 self._tries_ -= 1
                 continue
-            valid_given_type, given_input = self._check_input_type_(
+            valid_given_type, given_input = self.__check_input_type(
                 given_input,
                 expected_type)
             if not valid_given_type:
                 self._tries_ -= 1
                 continue
-            if not self._check_options_complience_(given_input, options):
+            if not self.__check_options_complience(given_input, options):
                 self._tries_ -= 1
                 continue
             valid_input = True
@@ -66,7 +66,7 @@ class Input_Manager():
             exit()
         return given_input
 
-    def _check_input_type_(self,
+    def __check_input_type(self,
                            given_input_string: str,
                            expected_type: valid_types,
                            ) -> Tuple[bool, valid_types]:
@@ -92,7 +92,7 @@ class Input_Manager():
             return False, given_input_string
         return True, given_input
 
-    def _check_options_complience_(self,
+    def __check_options_complience(self,
                                    given_input: valid_types,
                                    options: list
                                    ) -> bool:

@@ -19,7 +19,7 @@ class Symbols_Catalogue:
         self._top_hiragana_ = config["top_symbol"]["hiragana"]
         self._top_katakana_ = config["top_symbol"]["katakana"]
         self._top_kanji_ = config["top_symbol"]["kanji"]
-        self._create_catalogue_()
+        self.__create_catalogue()
 
     def get_catalogue(self) -> dict:
         """
@@ -30,7 +30,7 @@ class Symbols_Catalogue:
         """
         return self._catalogue_
 
-    def _create_catalogue_(self) -> None:
+    def __create_catalogue(self) -> None:
         """
         Creates a catalogue, either the whole catalogue or a truncated one
         depending of the config variables.
@@ -38,28 +38,28 @@ class Symbols_Catalogue:
         if(self._top_hiragana_ == 'py'
            and self._top_katakana_ == 'py'
            and self._top_kanji_ == list(kanji.keys())[0]):
-            self._create_whole_catalogue_()
+            self.__create_whole_catalogue()
         else:
-            self._create_config_truncated_catalogue_()
+            self.__create_config_truncated_catalogue()
 
-    def _create_whole_catalogue_(self) -> None:
+    def __create_whole_catalogue(self) -> None:
         """
         Creates a catalogue with all the possibilities of hiragana, katakana
         and kanji (limited to the Joyo kanji database).
         """
         self._catalogue_ = {}
 
-        self._catalogue_["hiragana"] = self._get_symbols_as_list_(
+        self._catalogue_["hiragana"] = self.__get_symbols_as_list(
             hiragana
             )
-        self._catalogue_["katakana"] = self._get_symbols_as_list_(
+        self._catalogue_["katakana"] = self.__get_symbols_as_list(
             katakana
             )
-        self._catalogue_["kanji"] = self._get_symbols_as_list_(
+        self._catalogue_["kanji"] = self.__get_symbols_as_list(
             kanji 
             )
 
-    def _create_config_truncated_catalogue_(self) -> None:
+    def __create_config_truncated_catalogue(self) -> None:
         """
         Creates a catalogue truncated with all the possibilities of hiragana,
         katakana and kanji (limited to the Joyo kanji database), up to the
@@ -68,27 +68,27 @@ class Symbols_Catalogue:
         self._catalogue_ = {}
         
         if self._top_hiragana_ != "":
-            self._catalogue_["hiragana"] = self._get_symbols_as_list_(
+            self._catalogue_["hiragana"] = self.__get_symbols_as_list(
                 hiragana,
                 truncate_catalogue=True,
                 top_symbol=self._top_hiragana_
             )
 
         if self._top_katakana_ != "":
-            self._catalogue_["katakana"] = self._get_symbols_as_list_(
+            self._catalogue_["katakana"] = self.__get_symbols_as_list(
                 katakana,
                 truncate_catalogue=True,
                 top_symbol=self._top_katakana_
             )
 
         if self._top_kanji_ != 0:
-            self._catalogue_["kanji"] = self._get_symbols_as_list_(
+            self._catalogue_["kanji"] = self.__get_symbols_as_list(
                 kanji,
                 truncate_catalogue=True,
                 top_symbol=self._top_kanji_
             )
     
-    def _get_symbols_as_list_(self,
+    def __get_symbols_as_list(self,
                               symbols_catalogue: tuple,
                               truncate_catalogue: bool = False,
                               top_symbol: str = ""
