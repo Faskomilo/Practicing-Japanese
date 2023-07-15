@@ -37,7 +37,7 @@ class Symbols_Catalogue:
         """
         if(self._top_hiragana_ == 'py'
            and self._top_katakana_ == 'py'
-           and self._top_kanji_ == list(kanji.keys())[0]):
+           and self._top_kanji_ == "7"):
             self.__create_whole_catalogue()
         else:
             self.__create_config_truncated_catalogue()
